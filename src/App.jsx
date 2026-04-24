@@ -119,11 +119,25 @@ function loadContractors() {
 }
 
 function getRoute() {
-  if (window.location.pathname === "/contractor-signup") {
+  const hashRoute = window.location.hash.replace("#", "");
+
+  if (hashRoute === "/contractor-signup") {
+    return "/contractor-signup";
+  }
+
+  if (hashRoute === "/customer") {
+    return "/customer";
+  }
+
+  if (window.location.pathname.endsWith("/contractor-signup")) {
     return "/contractor-signup";
   }
 
   return "/customer";
+}
+
+function getRouteHref(route) {
+  return `#${route}`;
 }
 
 function RecenterMap({ target }) {
@@ -252,14 +266,14 @@ function AppNav({ route, onNavigate }) {
     <nav className="app-nav" aria-label="Main navigation">
       <a
         className={route === "/customer" ? "active" : ""}
-        href="/customer"
+        href={getRouteHref("/customer")}
         onClick={(event) => onNavigate(event, "/customer")}
       >
         Customer Search
       </a>
       <a
         className={route === "/contractor-signup" ? "active" : ""}
-        href="/contractor-signup"
+        href={getRouteHref("/contractor-signup")}
         onClick={(event) => onNavigate(event, "/contractor-signup")}
       >
         Contractor Signup
@@ -799,17 +813,21 @@ export default function App() {
   }), []);
 
   useEffect(() => {
-    if (window.location.pathname === "/") {
-      window.history.replaceState(null, "", "/customer");
+    if (!window.location.hash) {
+      window.history.replaceState(null, "", getRouteHref(getRoute()));
     }
 
-    function handlePopState() {
+    function handleRouteChange() {
       setRoute(getRoute());
     }
 
-    window.addEventListener("popstate", handlePopState);
+    window.addEventListener("hashchange", handleRouteChange);
+    window.addEventListener("popstate", handleRouteChange);
 
-    return () => window.removeEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("hashchange", handleRouteChange);
+      window.removeEventListener("popstate", handleRouteChange);
+    };
   }, []);
 
   useEffect(() => {
@@ -818,7 +836,7 @@ export default function App() {
 
   function handleNavigate(event, nextRoute) {
     event.preventDefault();
-    window.history.pushState(null, "", nextRoute);
+    window.history.pushState(null, "", getRouteHref(nextRoute));
     setRoute(nextRoute);
   }
 

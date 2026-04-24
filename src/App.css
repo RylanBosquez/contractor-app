@@ -1,0 +1,47 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100vh;
+}
+
+.leaflet-container {
+  height: 100vh;
+  width: 100vw;
+}
+
+.radius-control {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  width: min(320px, calc(100vw - 32px));
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+  font-family: system-ui, sans-serif;
+}
+
+.radius-control label {
+  display: block;
+  margin-bottom: 8px;
+  color: #111827;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.radius-control input {
+  display: block;
+  width: 100%;
+  accent-color: #2563eb;
+}
